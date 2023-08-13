@@ -1,10 +1,8 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.formatDocument": true
   },
-  "conventionalCommits.scopes": [
-    "General",
-    "Dependencies"
-  ]
+  "eslint.validate": ["typescript", "typescriptreact"],
+  "conventionalCommits.scopes": ["General", "Dependencies"]
 }
