@@ -4,5 +4,5 @@
     "source.formatDocument": true
   },
   "eslint.validate": ["typescript", "typescriptreact"],
-  "conventionalCommits.scopes": ["General", "Dependencies"]
+  "conventionalCommits.scopes": ["General", "Dependencies", "UI"]
 }
