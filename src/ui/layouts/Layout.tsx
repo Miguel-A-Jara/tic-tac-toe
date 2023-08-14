@@ -6,7 +6,11 @@ import { useEffectOnce, useLocalStorage } from 'usehooks-ts'
 // Project
 import { Theme, useThemeStore } from '~/zustand/theme'
 
-function Layout() {
+interface LayoutProps {
+  children: JSX.Element | JSX.Element[]
+}
+
+export default function Layout({ children }: LayoutProps) {
   const currentTheme = useThemeStore((store) => store.currentTheme)
 
   return (
@@ -16,7 +20,7 @@ function Layout() {
       </Helmet>
       <div className='container mx-auto flex h-screen flex-col justify-between'>
         <Navbar />
-
+        {children}
         <Footer />
       </div>
     </>
@@ -75,5 +79,3 @@ function Footer() {
     </footer>
   )
 }
-
-export default Layout
