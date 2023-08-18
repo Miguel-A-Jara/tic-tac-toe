@@ -1,53 +1,60 @@
-// Third Party
-import { BsXLg, BsCircle, BsDashLg } from 'react-icons/bs'
-
-type TicTacToeIdx = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
-type TicTacToeStatus = 'empty' | 'cross' | 'circle'
-
-const ticTacToe: Record<TicTacToeIdx, TicTacToeStatus> = {
-  0: 'circle',
-  1: 'empty',
-  2: 'cross',
-  3: 'circle',
-  4: 'empty',
-  5: 'empty',
-  6: 'cross',
-  7: 'empty',
-  8: 'empty',
-}
+// Project
+import { iconByStatus } from '~/utils/tic-tac-toe/icons'
+import { useTicTacToe, type TicTacToeValue } from '~/zustand/tic-tac-toe'
 
 export default function TicTacToeGrid() {
-  const gridIdx = Object.keys(ticTacToe)
+  const { ticTacToeGrid, gridSize } = useTicTacToe((state) => state)
+  const rowSize = Math.sqrt(gridSize)
 
   return (
-    <div className='mx-auto grid aspect-square w-full grid-cols-3 content-around justify-items-center gap-4 rounded-lg bg-base-300 p-2 sm:max-w-sm lg:max-w-md'>
-      {gridIdx.map((item) => (
-        <GridItem key={item} idx={parseInt(item) as TicTacToeIdx} />
-      ))}
+    <div className='mx-auto w-full p-2 sm:max-w-sm lg:max-w-md'>
+      <div
+        style={{ gridTemplateColumns: `repeat(${rowSize}, 1fr)` }}
+        className={`grid aspect-square place-items-stretch gap-4 rounded-lg bg-base-300 p-4`}
+      >
+        {ticTacToeGrid.map((ticTacToeItem, idx) => (
+          <GridItem key={idx} item={ticTacToeItem} idx={idx} />
+        ))}
+      </div>
+      <CurrentPlayer />
     </div>
   )
 }
 
 interface GridItemProps {
-  idx: TicTacToeIdx
+  idx: number
+  item: TicTacToeValue
 }
 
-function GridItem({ idx }: GridItemProps) {
-  const iconByStatus: Record<TicTacToeStatus, JSX.Element> = {
-    cross: <BsXLg className='text-3xl' />,
-    circle: <BsCircle className='text-3xl' />,
-    empty: <BsDashLg className='text-3xl' />,
-  }
-  const currentValue = ticTacToe[idx]
+function GridItem({ item, idx }: GridItemProps) {
+  const { updateGridAtIdx, currentPlayer } = useTicTacToe((state) => state)
+  const playerValue = currentPlayer === 'circle' ? 'circle' : 'cross'
 
   return (
     <div
-      className={`btn h-20 w-20 rounded-md sm:h-24 sm:w-24 
-      ${currentValue === 'cross' && 'btn-primary'}
-      ${currentValue === 'circle' && 'btn-secondary'}
+      className={`btn h-full w-full rounded-md
+      ${item !== 'empty' && 'no-animation cursor-default'}
+      ${item === 'cross' && 'btn-primary'}
+      ${item === 'circle' && 'btn-secondary'}
     `}
+      onClick={() => item === 'empty' && updateGridAtIdx(idx, playerValue)}
     >
-      {iconByStatus[currentValue]}
+      {iconByStatus[item]}
+    </div>
+  )
+}
+
+function CurrentPlayer() {
+  const currentPlayer = useTicTacToe((state) => state.currentPlayer)
+
+  return (
+    <div
+      className={` mt-4 flex w-full items-center justify-center gap-2 text-2xl font-bold transition-all duration-150
+      ${currentPlayer === 'cross' && 'text-primary'} 
+      ${currentPlayer === 'circle' && 'text-secondary'} 
+      `}
+    >
+      Current Player: {iconByStatus[currentPlayer]}
     </div>
   )
 }
