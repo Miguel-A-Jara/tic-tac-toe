@@ -3,6 +3,7 @@
   "editor.codeActionsOnSave": {
     "source.formatDocument": true
   },
+  "typescript.preferences.importModuleSpecifier": "non-relative",
   "eslint.validate": ["typescript", "typescriptreact"],
   "conventionalCommits.scopes": [
     "General",
