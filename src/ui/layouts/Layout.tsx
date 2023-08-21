@@ -7,7 +7,7 @@ import { useEffectOnce, useLocalStorage } from 'usehooks-ts'
 import { Theme, useThemeStore } from '~/zustand/theme'
 
 interface LayoutProps {
-  children: JSX.Element | JSX.Element[]
+  children: JSX.Element | Array<JSX.Element | null>
 }
 
 export default function Layout({ children }: LayoutProps) {
@@ -18,7 +18,7 @@ export default function Layout({ children }: LayoutProps) {
       <Helmet>
         <html data-theme={currentTheme} />
       </Helmet>
-      <div className='container mx-auto flex h-screen flex-col justify-between'>
+      <div className='container mx-auto flex h-screen flex-col justify-between w-screen'>
         <Navbar />
         {children}
         <Footer />
