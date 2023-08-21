@@ -2,8 +2,12 @@
 import { iconByStatus } from '~/utils/tic-tac-toe/icons'
 import { useTicTacToe, type TicTacToeValue } from '~/zustand/tic-tac-toe'
 
-export default function TicTacToeGrid() {
-  const { ticTacToeGrid, gridSize } = useTicTacToe((state) => state)
+interface TicTacToeGridProps {
+  grid: TicTacToeValue[]
+}
+
+export default function TicTacToeGrid({ grid }: TicTacToeGridProps) {
+  const gridSize = grid.length
   const rowSize = Math.sqrt(gridSize)
 
   return (
@@ -12,7 +16,7 @@ export default function TicTacToeGrid() {
         style={{ gridTemplateColumns: `repeat(${rowSize}, 1fr)` }}
         className={`grid aspect-square place-items-stretch gap-4 rounded-lg bg-base-300 p-4`}
       >
-        {ticTacToeGrid.map((ticTacToeItem, idx) => (
+        {grid.map((ticTacToeItem, idx) => (
           <GridItem key={idx} item={ticTacToeItem} idx={idx} />
         ))}
       </div>
@@ -32,12 +36,12 @@ function GridItem({ item, idx }: GridItemProps) {
 
   return (
     <div
+      onClick={() => item === 'empty' && updateGridAtIdx(idx, playerValue)}
       className={`btn h-full w-full rounded-md
       ${item !== 'empty' && 'no-animation cursor-default'}
       ${item === 'cross' && 'btn-primary'}
       ${item === 'circle' && 'btn-secondary'}
     `}
-      onClick={() => item === 'empty' && updateGridAtIdx(idx, playerValue)}
     >
       {iconByStatus[item]}
     </div>

@@ -2,25 +2,35 @@
 import { useEffect, useRef } from 'react'
 
 // Project
-import { useTicTacToe } from '~/zustand/tic-tac-toe'
+import { CurrentPlayer } from '~/zustand/tic-tac-toe'
 import { iconByStatus } from '~/utils/tic-tac-toe/icons'
 
-export default function GameWonModal() {
+interface GameWonModalProps {
+  isOpen: boolean
+  onClose: () => void
+  userThatWon: CurrentPlayer | null
+}
+
+export default function GameWonModal({
+  isOpen,
+  onClose,
+  userThatWon,
+}: GameWonModalProps) {
   const gameWonModalRef = useRef<HTMLDialogElement>(null)
-  const [userThatWon, reset] = useTicTacToe((state) => [
-    state.userThatWon,
-    state.resetState,
-  ])
 
   useEffect(() => {
-    if (!userThatWon) return
-    gameWonModalRef.current?.showModal()
-  }, [userThatWon])
+    gameWonModalRef.current?.close()
+    if (isOpen) gameWonModalRef.current?.showModal()
+  }, [isOpen])
 
   return (
     <>
       {userThatWon && (
-        <dialog className='modal' ref={gameWonModalRef} onClose={() => reset()}>
+        <dialog
+          className='modal'
+          ref={gameWonModalRef}
+          onClose={() => onClose()}
+        >
           <form
             method='dialog'
             className={`modal-box text-white ${
@@ -33,7 +43,17 @@ export default function GameWonModal() {
             </div>
 
             <div className='modal-action flex justify-center'>
-              <button className='btn'>Reset</button>
+              <button
+                className={`btn btn-outline border-white text-white outline-none hover:bg-white hover:border-white 
+                ${
+                  userThatWon === 'cross'
+                    ? 'hover:text-primary'
+                    : 'hover:text-secondary'
+                }
+              `}
+              >
+                Reset
+              </button>
             </div>
           </form>
         </dialog>
