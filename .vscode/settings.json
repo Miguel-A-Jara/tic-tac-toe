@@ -9,6 +9,7 @@
     "General",
     "Dependencies",
     "UI",
-    "BusinessLogic"
+    "BusinessLogic",
+    "Testing"
   ]
 }
